@@ -1,3 +1,6 @@
+// Copyright Kcy.
+// Friendly sponsor for dbt6666.
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,21 +22,21 @@ public static class DataBase
             XmlElement _class = _xml.CreateElement("Class");
 
             XmlElement _name = _xml.CreateElement("Name");
-            _name.Value = p_class.name;
+            _name.InnerText = p_class.name;
 
             XmlElement _days = _xml.CreateElement("Days");
             for(int i = 0; i < p_class.days.Count; i++)
             {
                 XmlElement _day = _xml.CreateElement("Day");
-                _day.Value = GetDayStr(p_class.days[i]);
+                _day.InnerText = GetDayStr(p_class.days[i]);
                 _days.AppendChild(_day);
             }
 
-            XmlElement _timeFrom = _xml.CreateElement("Time From");
-            _timeFrom.Value = GetTimeStr(p_class.timeFrom);
+            XmlElement _timeFrom = _xml.CreateElement("TimeFrom");
+            _timeFrom.InnerText = GetTimeStr(p_class.timeFrom);
 
-            XmlElement _timeTo = _xml.CreateElement("Time To");
-            _timeTo.Value = GetTimeStr(p_class.timeTo);
+            XmlElement _timeTo = _xml.CreateElement("TimeTo");
+            _timeTo.InnerText = GetTimeStr(p_class.timeTo);
             
 
             _class.AppendChild(_name);
