@@ -15,42 +15,55 @@ public static class DataBase
 
     public static void WriteXml(ClassData p_class)
     {
-        if(!File.Exists(classXmlPath))
+        XmlDocument _xml = new XmlDocument();
+        XmlElement _root;
+        if (!File.Exists(classXmlPath))
         {
-            XmlDocument _xml = new XmlDocument();
             _xml.CreateXmlDeclaration("1.0", "UTF-8", "");
-            XmlElement _class = _xml.CreateElement("Class");
-
-            XmlElement _name = _xml.CreateElement("Name");
-            _name.InnerText = p_class.name;
-
-            XmlElement _days = _xml.CreateElement("Days");
-            for(int i = 0; i < p_class.days.Count; i++)
-            {
-                XmlElement _day = _xml.CreateElement("Day");
-                _day.InnerText = GetDayStr(p_class.days[i]);
-                _days.AppendChild(_day);
-            }
-
-            XmlElement _timeFrom = _xml.CreateElement("TimeFrom");
-            _timeFrom.InnerText = GetTimeStr(p_class.timeFrom);
-
-            XmlElement _timeTo = _xml.CreateElement("TimeTo");
-            _timeTo.InnerText = GetTimeStr(p_class.timeTo);
-            
-
-            _class.AppendChild(_name);
-            _class.AppendChild(_days);
-            _class.AppendChild(_timeFrom);
-            _class.AppendChild(_timeTo);
-            _xml.AppendChild(_class);
-            _xml.Save(classXmlPath);
+             _root = _xml.CreateElement("Data");
         }
         else
         {
-            //XmlDocument xml = new XmlDocument();
-            //xml.Load(classXmlPath);
+            _xml.Load(classXmlPath);
+            _root = _xml.DocumentElement;
+            foreach (XmlNode _element in _root.ChildNodes)
+            {
+                string _className = _element.Attributes[0].Value;
+                if(_className == p_class.name)
+                {
+                    UnityEngine.Debug.Log($"Class[{_className}] already exists");
+                    return;
+                }
+            }
         }
+        WriteNewClass(p_class, _xml, _root);
+    }
+
+    private static void WriteNewClass(ClassData p_class, XmlDocument p_xml, XmlElement p_root)
+    {
+        XmlElement _class = p_xml.CreateElement("Class");
+        _class.SetAttribute("Name", p_class.name);
+
+        XmlElement _days = p_xml.CreateElement("Days");
+        for (int i = 0; i < p_class.days.Count; i++)
+        {
+            XmlElement _day = p_xml.CreateElement("Day");
+            _day.InnerText = GetDayStr(p_class.days[i]);
+            _days.AppendChild(_day);
+        }
+
+        XmlElement _timeFrom = p_xml.CreateElement("TimeFrom");
+        _timeFrom.InnerText = GetTimeStr(p_class.timeFrom);
+
+        XmlElement _timeTo = p_xml.CreateElement("TimeTo");
+        _timeTo.InnerText = GetTimeStr(p_class.timeTo);
+
+        _class.AppendChild(_days);
+        _class.AppendChild(_timeFrom);
+        _class.AppendChild(_timeTo);
+        p_root.AppendChild(_class);
+        p_xml.AppendChild(p_root);
+        p_xml.Save(classXmlPath);
     }
 
     public static void CreateClassData(string p_name, List<DateTime> p_days, DateTime p_timeFrom, DateTime p_timeTo)
