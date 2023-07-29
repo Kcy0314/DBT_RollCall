@@ -2,25 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
 {
     #region Parameter
+    [Header("Parameter")]
+    [SerializeField] private float homeButtonMoveTime = 0.5f;
+    [SerializeField] private float canvasShowTime = 0.3f;
     enum CanvasType
     {
         Home, Classes, Students, RollCall, Tools
     }
     private CanvasType currentCanvas = CanvasType.Home;
-    [SerializeField] private float homeButtonMoveTime = 0.5f;
-    [SerializeField] private float canvasShowTime = 0.3f;
     #endregion
-
 
     #region HomeCanvas
     [Header("HomeCanvas")]
     [SerializeField] private RectTransform homeButtons;
+    private bool isHomeButtonTweening = false;
     public void ReturnHomeCanvas()
     {
+        if (isHomeButtonTweening) { return; }
         switch (currentCanvas)
         {
             case CanvasType.Classes:
@@ -40,12 +43,14 @@ public class UiManager : MonoBehaviour
 
     private void ShowHomeButtons()
     {
-        homeButtons.DOMoveY(homeButtons.position.y - 500, homeButtonMoveTime).SetEase(Ease.InOutBack);
+        isHomeButtonTweening = true;
+        homeButtons.DOMoveY(homeButtons.position.y - 500, homeButtonMoveTime).SetEase(Ease.InOutBack).OnComplete(() => isHomeButtonTweening = false);
     }
 
     private void HideHomeButtons()
     {
-        homeButtons.DOMoveY(homeButtons.position.y + 500, homeButtonMoveTime).SetEase(Ease.InOutBack);
+        isHomeButtonTweening = true;
+        homeButtons.DOMoveY(homeButtons.position.y + 500, homeButtonMoveTime).SetEase(Ease.InOutBack).OnComplete(() => isHomeButtonTweening = false);
     }
     #endregion
 
@@ -54,6 +59,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] private CanvasGroup classesCanvas;
     public void OpenClassCanvas()
     {
+        if (isHomeButtonTweening) { return; }
         if(currentCanvas != CanvasType.Home) { return; }
         HideHomeButtons();
         ShowClassesCanvas();
@@ -62,6 +68,7 @@ public class UiManager : MonoBehaviour
 
     public void CloseClassCanvas()
     {
+        if (isHomeButtonTweening) { return; }
         if (currentCanvas != CanvasType.Classes) { return; }
         HideClassesCanvas();
         ShowHomeButtons();
@@ -86,6 +93,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] private CanvasGroup studentsCanvas;
     public void OpenStudentsCanvas()
     {
+        if (isHomeButtonTweening) { return; }
         if (currentCanvas != CanvasType.Home) { return; }
         HideHomeButtons();
         ShowStudentsCanvas();
@@ -94,6 +102,7 @@ public class UiManager : MonoBehaviour
 
     public void CloseStudentsCanvas()
     {
+        if (isHomeButtonTweening) { return; }
         if (currentCanvas != CanvasType.Students) { return; }
         HideStudentsCanvas();
         ShowHomeButtons();
@@ -118,6 +127,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] private CanvasGroup rollCallCanvas;
     public void OpenRollCallCanvas()
     {
+        if (isHomeButtonTweening) { return; }
         if (currentCanvas != CanvasType.Home) { return; }
         HideHomeButtons();
         ShowRollCallCanvas();
@@ -126,6 +136,7 @@ public class UiManager : MonoBehaviour
 
     public void CloseRollCallCanvas()
     {
+        if (isHomeButtonTweening) { return; }
         if (currentCanvas != CanvasType.RollCall) { return; }
         HideRollCallCanvas();
         ShowHomeButtons();
@@ -150,6 +161,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] private CanvasGroup toolsCanvas;
     public void OpenToolsCanvas()
     {
+        if (isHomeButtonTweening) { return; }
         if (currentCanvas != CanvasType.Home) { return; }
         HideHomeButtons();
         ShowToolsCanvas();
@@ -158,6 +170,7 @@ public class UiManager : MonoBehaviour
 
     public void CloseToolsCanvas()
     {
+        if (isHomeButtonTweening) { return; }
         if (currentCanvas != CanvasType.Tools) { return; }
         HideToolsCanvas();
         ShowHomeButtons();
@@ -174,6 +187,15 @@ public class UiManager : MonoBehaviour
     {
         toolsCanvas.DOFade(0, canvasShowTime).SetEase(Ease.OutExpo);
         toolsCanvas.blocksRaycasts = false;
+    }
+    #endregion
+
+    #region Other
+    public void ClickButton(Button p_button)
+    {
+        if (isHomeButtonTweening) { return; }
+        p_button.transform.DOPunchScale(Vector2.one * -0.2f, 0.2f);
+        //audio
     }
     #endregion
 
