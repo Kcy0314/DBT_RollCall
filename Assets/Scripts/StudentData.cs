@@ -5,24 +5,33 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public struct StudentData
-{
-    public string Id => id;
-    public string Name => name;
-    public int Age => age;
-    public List<ClassData> Classes => classes;
+public struct StudentData {
+    public string id { get; private set; }
+    public string name { get; private set; }
+    public int age { get; private set; }
+    public int gender { get; private set; }
+    public List<ClassData> classes { get; private set; }
+    public bool isDefault => name == null || name == "";
 
-    [SerializeField] private string id;
-    [SerializeField] private string name;
-    [SerializeField] private int age;
-    [SerializeField] private List<ClassData> classes;
-
-    public StudentData(string p_id, string p_name, int p_age, List<ClassData> p_classes)
-    {
+    public StudentData(string p_id, string p_name, int p_age, int p_gender, List<ClassData> p_classes = null) {
         id = p_id;
         name = p_name;
         age = p_age;
-        classes = p_classes;
+        gender = p_gender;
+        if (p_classes != null) {
+            classes = p_classes;
+        } else {
+            classes = new List<ClassData>();
+        }
     }
 
+    public override string ToString() {
+        string _classesStr = "";
+        foreach (ClassData _class in classes) {
+            _classesStr += _class.name;
+            _classesStr += ", ";
+        }
+        return $"Student[{name}]: Id[{id}], Age[{age}], Gender[{gender}]\n" +
+            $"\t{_classesStr}";
+    }
 }

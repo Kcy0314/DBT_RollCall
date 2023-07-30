@@ -1,0 +1,18 @@
+<Data>
+  <Class Name="test2">
+    <Days>
+      <Day>2023-07-28</Day>
+      <Day>2023-03-14</Day>
+    </Days>
+    <TimeFrom>13-30</TimeFrom>
+    <TimeTo>15-00</TimeTo>
+  </Class>
+  <Class Name="test">
+    <Days>
+      <Day>2023-07-28</Day>
+      <Day>2023-03-14</Day>
+    </Days>
+    <TimeFrom>13-30</TimeFrom>
+    <TimeTo>15-00</TimeTo>
+  </Class>
+</Data>
