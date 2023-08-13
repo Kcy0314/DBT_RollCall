@@ -14,6 +14,14 @@ public static class DataBase {
     static string classXmlPath = "ClassDataBase.xml";
     private static Dictionary<string, ClassData> ClassDict = new Dictionary<string, ClassData>();
 
+#if UNITY_EDITOR
+    public static void LogClasses() {
+        foreach (var _class in ClassDict.Values) {
+            Debug.Log(_class);
+        }
+    }
+#endif
+
     public static void LoadClassData() {
         if (!File.Exists(classXmlPath)) { return; }
         XmlDocument _xml = new XmlDocument();
@@ -43,9 +51,7 @@ public static class DataBase {
 
 #if UNITY_EDITOR
         Debug.Log("LoadClassData");
-        foreach (var _class in ClassDict.Values) {
-            Debug.Log(_class);
-        }
+        //LogClasses();
 #endif
     }
 
@@ -119,6 +125,14 @@ public static class DataBase {
     static string studentXmlPath = "StudentDataBase.xml";
     private static Dictionary<string, StudentData> StudentDict = new Dictionary<string, StudentData>();
 
+#if UNITY_EDITOR
+    public static void LogStudents() {
+        foreach (var _student in StudentDict.Values) {
+            Debug.Log(_student);
+        }
+    }
+#endif
+
     public static void LoadStudentData() {
         if (!File.Exists(studentXmlPath)) { return; }
         XmlDocument _xml = new XmlDocument();
@@ -138,14 +152,15 @@ public static class DataBase {
                 }
             }
             StudentData _studentData = new StudentData(_studentId, _studentName, _studentAge, _studentGender, _studentClasses);
+            foreach (ClassData _class in _studentClasses) {
+                _class.AddStudent(_studentData);
+            }
             StudentDict.Add(_studentData.id, _studentData);
         }
 
 #if UNITY_EDITOR
         Debug.Log("LoadStudentData");
-        foreach (var _student in StudentDict.Values) {
-            Debug.Log(_student);
-        }
+        //LogStudents();
 #endif
     }
 

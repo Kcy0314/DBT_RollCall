@@ -10,5 +10,9 @@ public class AppManager : MonoBehaviour
     private void Awake() {
         DataBase.LoadClassData();
         DataBase.LoadStudentData();
+#if UNITY_EDITOR
+        DataBase.LogClasses();
+        DataBase.LogStudents();
+#endif
     }
 }

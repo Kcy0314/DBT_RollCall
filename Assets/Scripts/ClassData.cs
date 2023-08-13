@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public struct ClassData {
     public string name { get; private set; }
-    public List<StudentData> students { get; private set; }
+    public Dictionary<string, StudentData> students { get; private set; }
     public List<DateTime> days { get; private set; }
     public DateTime timeFrom { get; private set; }
     public DateTime timeTo { get; private set; }
@@ -18,7 +18,11 @@ public struct ClassData {
         timeFrom = p_timeFrom;
         timeTo = p_timeTo;
 
-        students = new List<StudentData>();
+        students = new Dictionary<string, StudentData>();
+    }
+
+    public void AddStudent(StudentData p_student) {
+        students.Add(p_student.id, p_student);
     }
 
     public override string ToString() {
@@ -27,7 +31,7 @@ public struct ClassData {
             _daysStr += _day.ToString("d");
             _daysStr += ", ";
         }
-        foreach (StudentData _student in students) {
+        foreach (StudentData _student in students.Values) {
             _studentsStr += _student.name;
             _studentsStr += ", ";
         }
