@@ -26,11 +26,12 @@ public struct StudentData {
     }
 
     public override string ToString() {
-        string _classesStr = "";
+        string _classesStr = "Classes: [";
         foreach (ClassData _class in classes) {
             _classesStr += _class.name;
             _classesStr += ", ";
         }
+        _classesStr += "]";
         return $"Student[{name}]: Id[{id}], Age[{age}], Gender[{gender}]\n" +
             $"\t{_classesStr}";
     }

@@ -22,7 +22,7 @@ public struct ClassData {
     }
 
     public override string ToString() {
-        string _daysStr = "", _studentsStr = "";
+        string _daysStr = "Days: [", _studentsStr = "Students: [";
         foreach (DateTime _day in days) {
             _daysStr += _day.ToString("d");
             _daysStr += ", ";
@@ -31,6 +31,7 @@ public struct ClassData {
             _studentsStr += _student.name;
             _studentsStr += ", ";
         }
+        _daysStr += "]"; _studentsStr += "]";
         return $"Class[{name}]: " +
             $"{timeFrom.Hour.ToString("D2")}:{timeFrom.Minute.ToString("D2")} ~ " +
             $"{timeTo.Hour.ToString("D2")}:{timeTo.Minute.ToString("D2")}\n" +

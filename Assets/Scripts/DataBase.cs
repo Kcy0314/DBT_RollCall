@@ -43,7 +43,7 @@ public static class DataBase {
 
 #if UNITY_EDITOR
         Debug.Log("LoadClassData");
-        foreach (var _class in ClassDict) {
+        foreach (var _class in ClassDict.Values) {
             Debug.Log(_class);
         }
 #endif
@@ -120,7 +120,33 @@ public static class DataBase {
     private static Dictionary<string, StudentData> StudentDict = new Dictionary<string, StudentData>();
 
     public static void LoadStudentData() {
-        throw new NotImplementedException();
+        if (!File.Exists(studentXmlPath)) { return; }
+        XmlDocument _xml = new XmlDocument();
+        _xml.Load(studentXmlPath);
+        XmlElement _root = _xml.DocumentElement;
+        foreach (XmlElement _element in _root.ChildNodes) {
+            string _studentName = _element.Attributes["Name"].Value;
+            string _studentId = _element.Attributes["Id"].Value;
+            int _studentAge = int.Parse(_element.Attributes["Age"].Value);
+            int _studentGender = int.Parse(_element.Attributes["Gender"].Value);
+            List<ClassData> _studentClasses = new List<ClassData>();
+            foreach (XmlElement _node in _element.ChildNodes) {
+                if (_node.Name == "Classes") {
+                    foreach (XmlElement _classNode in _node.ChildNodes) {
+                        _studentClasses.Add(GetClass(_classNode.InnerText));
+                    }
+                }
+            }
+            StudentData _studentData = new StudentData(_studentId, _studentName, _studentAge, _studentGender, _studentClasses);
+            StudentDict.Add(_studentData.id, _studentData);
+        }
+
+#if UNITY_EDITOR
+        Debug.Log("LoadStudentData");
+        foreach (var _student in StudentDict.Values) {
+            Debug.Log(_student);
+        }
+#endif
     }
 
     private static bool WriteXml(StudentData p_student) {
